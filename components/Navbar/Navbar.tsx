@@ -23,7 +23,7 @@ function Navbar() {
     },
     {
       name: "Sell NFT",
-      to: "/createNFT",
+      to: "/createnft",
     },
     {
       name: "All NFT",
