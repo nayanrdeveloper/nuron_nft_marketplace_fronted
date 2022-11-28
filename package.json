@@ -6,11 +6,15 @@
     "start": "next start"
   },
   "dependencies": {
+    "aos": "^2.3.4",
     "next": "latest",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-icons": "^4.6.0",
+    "swiper": "^8.4.5"
   },
   "devDependencies": {
+    "@types/aos": "^3.0.4",
     "@types/node": "18.11.3",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
