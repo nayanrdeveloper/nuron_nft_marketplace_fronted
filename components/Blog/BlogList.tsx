@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 import { CgTime } from "react-icons/cg";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import ClipLoader from "react-spinners/ClipLoader";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import blogAbi from "../../contractAbi/blogAbi";
 import { ethers } from "ethers";
 import axios from "axios";
@@ -22,29 +23,43 @@ function BlogList() {
   }, []);
 
   const getBlogs = async () => {
-    setIsLoading(true);
-    const blogSmartContract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_BLOG_ADDRESS || "",
-      blogAbi,
-      signer || provider
-    );
-    const blogData = await blogSmartContract.getAllBlogs();
-    const data: any = await Promise.all(
-      blogData.map(async (d: any) => {
-        const meta = await axios.get(d._blogUrl);
-        const blogId = d._blogId.toNumber();
-        const imageUrl = `https://ipfs.io/ipfs/${meta.data.image.substr(7)}`;
-        return {
-          title: d._title,
-          image: imageUrl,
-          desc: meta.data.description,
-          category: d._category,
-          blogId: blogId,
-        };
-      })
-    );
-    setBlogListData(data);
-    setIsLoading(false);
+    try {
+      setIsLoading(true);
+      const blogSmartContract = new ethers.Contract(
+        process.env.NEXT_PUBLIC_BLOG_ADDRESS || "",
+        blogAbi,
+        signer || provider
+      );
+      const blogData = await blogSmartContract.getAllBlogs();
+      const data: any = await Promise.all(
+        blogData.map(async (d: any) => {
+          const meta = await axios.get(d._blogUrl);
+          const blogId = d._blogId.toNumber();
+          const imageUrl = `https://ipfs.io/ipfs/${meta.data.image.substr(7)}`;
+          return {
+            title: d._title,
+            image: imageUrl,
+            desc: meta.data.description,
+            category: d._category,
+            blogId: blogId,
+          };
+        })
+      );
+      setBlogListData(data);
+      console.log(data);
+      setIsLoading(false);
+    } catch (error: any) {
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      setIsLoading(false);
+    }
   };
   const blogList = [
     {
@@ -78,6 +93,7 @@ function BlogList() {
   ];
   return (
     <article>
+      <ToastContainer theme="dark" />
       <div className="container my-8">
         <div className="">
           <span className="text-white text-3xl font-bold">Blogs</span>
