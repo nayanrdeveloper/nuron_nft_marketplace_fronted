@@ -100,7 +100,7 @@ function NFTCreate() {
       );
       await NFTTranction.wait();
       setIsLoading(false);
-      toast.success("Product are Upload Successfully", {
+      toast.success("Product are Upload Successfully.", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
