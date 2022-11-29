@@ -3,14 +3,15 @@ import type { AppProps } from "next/app";
 import Footer from "../components/Footer/Footer";
 import Navbar from "../components/Navbar/Navbar";
 import "@rainbow-me/rainbowkit/styles.css";
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { getDefaultWallets, RainbowKitProvider, Chain } from "@rainbow-me/rainbowkit";
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
+
 const { chains, provider } = configureChains(
-  [chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
-  [alchemyProvider({ apiKey: process.env.ALCHEMY_ID || "" }), publicProvider()]
+  [chain.polygonMumbai],
+  [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_POLYGON_RPC_API_URL || "" }), publicProvider()]
 );
 
 const { connectors } = getDefaultWallets({

@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { FaFileUpload } from "react-icons/fa";
-// import { NFTStorage, File } from "nft.storage";
+import { NFTStorage, File } from "nft.storage";
 import { ToastContainer, toast } from "react-toastify";
 // import connectWallet from "../walletConnect";
-// import { ethers } from "ethers";
-// import NFTTOkenABI from "../artifacts/contracts/myToken.sol/MyToken.json";
-// import NFTMarketplaceABI from "../artifacts/contracts/myNFT.sol/MyNFT.json";
+import { ethers } from "ethers";
+import myTokenAbi from "../../contractAbi/myTokenAbi";
+import myNFTAbi from "../../contractAbi/myNFT";
 import "react-toastify/dist/ReactToastify.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useSigner } from 'wagmi'
+import { useProvider } from 'wagmi'
+
+
 
 function NFTCreate() {
+  const { data: signer, isError } = useSigner();
+  const provider = useProvider()
   useEffect(() => {
     AOS.init();
     AOS.refresh();
@@ -37,84 +43,81 @@ function NFTCreate() {
     });
   };
 
-  // const onSubmitProduct = async (event) => {
-  //   event.preventDefault();
-  //   setIsLoading(true);
-  //   console.log("Start");
-  //   console.log(event.target.file.files[0]);
-  //   const imageFile = event.target.file.files[0];
-  //   if (!productData.name || !productData.desc || !productData.price) {
-  //     toast.error("All Fields are required!!!", {
-  //       position: "top-right",
-  //       autoClose: 3000,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //     });
-  //   } else {
-  //     const nftStorage = new NFTStorage({
-  //       token: process.env.NEXT_PUBLIC_NFT_STORAGE_KEY,
-  //     });
-  //     const link = await nftStorage.store({
-  //       image: imageFile,
-  //       name: productData.name,
-  //       description: productData.desc,
-  //       price: productData.price,
-  //     });
-  //     const ipfsURL = `https://ipfs.io/ipfs/${link.url.substr(7)}`;
-  //     connectWallet.connectWallet();
-  //     const provider = new ethers.providers.Web3Provider(window.ethereum);
-  //     const signer = await provider.getSigner();
+  const onSubmitProduct = async (event: any) => {
+    event.preventDefault();
+    setIsLoading(true);
+    console.log("Start");
+    console.log(event.target && event.target.file && event.target.file.files[0]);
+    const imageFile = event.target.file.files[0];
+    if (!productData.name || !productData.desc || !productData.price) {
+      toast.error("All Fields are required!!!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } else {
+      const nftStorage = new NFTStorage({
+        token: process.env.NEXT_PUBLIC_NFT_STORAGE_KEY || "",
+      });
+      const link = await nftStorage.store({
+        image: imageFile,
+        name: productData.name,
+        description: productData.desc,
+        price: productData.price,
+      });
+      const ipfsURL = `https://ipfs.io/ipfs/${link.url.substr(7)}`;
+      
+      let tokenContract = new ethers.Contract(
+        process.env.NEXT_PUBLIC_MYTOKEN_ADDRESS || "",
+        myTokenAbi,
+        signer || provider
+      );
+      let traction = await tokenContract.createToken(ipfsURL);
+      let tx = await traction.wait();
+      let event = tx.events[0];
+      let value = event.args[2];
+      let tokenId = value.toNumber();
 
-  //     let tokenContract = new ethers.Contract(
-  //       process.env.NEXT_PUBLIC_NFTTOKN_CONTRACT_ADDRESS,
-  //       NFTTOkenABI.abi,
-  //       signer
-  //     );
-  //     let traction = await tokenContract.createToken(ipfsURL);
-  //     let tx = await traction.wait();
-  //     let event = tx.events[0];
-  //     let value = event.args[2];
-  //     let tokenId = value.toNumber();
-
-  //     const NFTMarketplaceContract = new ethers.Contract(
-  //       process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT_ADDRESS,
-  //       NFTMarketplaceABI.abi,
-  //       signer
-  //     );
-  //     const price = await ethers.utils.parseUnits(productData.price, "ether");
-  //     let listingPrice = await NFTMarketplaceContract.getListedPrice();
-  //     let newlistingPrice = await listingPrice.toString();
-  //     let NFTTranction = await NFTMarketplaceContract.createToken(
-  //       process.env.NEXT_PUBLIC_NFTTOKN_CONTRACT_ADDRESS,
-  //       tokenId,
-  //       price,
-  //       {
-  //         value: newlistingPrice,
-  //       }
-  //     );
-  //     await NFTTranction.wait();
-  //     setIsLoading(false);
-  //     toast.success("Product are Upload Successfully", {
-  //       position: "top-right",
-  //       autoClose: 3000,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //     });
-  //     console.log(NFTTranction);
-  //   }
-  // };
+      const NFTMarketplaceContract = new ethers.Contract(
+        process.env.NEXT_PUBLIC_MYNFT_ADDRESS || "",
+        myNFTAbi,
+        signer || provider
+      );
+      const price = await ethers.utils.parseUnits(productData.price, "ether");
+      let listingPrice = await NFTMarketplaceContract.getListedPrice();
+      let newlistingPrice = await listingPrice.toString();
+      let NFTTranction = await NFTMarketplaceContract.createToken(
+        process.env.NEXT_PUBLIC_MYTOKEN_ADDRESS,
+        tokenId,
+        price,
+        {
+          value: newlistingPrice,
+        }
+      );
+      await NFTTranction.wait();
+      setIsLoading(false);
+      toast.success("Product are Upload Successfully", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      console.log(NFTTranction);
+    }
+  };
   return (
     <div>
       <ToastContainer theme="dark" />
       <div className="">
         <span className="text-white text-3xl font-bold">Create New NFT</span>
-        <form>
+        <form onSubmit={onSubmitProduct}>
           <div className="flex gap-x-10 mt-8">
             <div className="justify-center my-auto" data-aos="fade-right">
               <p className="text-white">Upload file</p>

@@ -37,8 +37,8 @@ function Footer() {
         <div className="flex">
           <ul className="flex gap-2">
               {
-                socialMediaList.map((socialMedia: socialMediaListStruct) => {
-                  return <FooterSocialMedia {...socialMedia} />
+                socialMediaList.map((socialMedia: socialMediaListStruct, index) => {
+                  return <FooterSocialMedia {...socialMedia} key={index} />
                 })
               }
           </ul>
