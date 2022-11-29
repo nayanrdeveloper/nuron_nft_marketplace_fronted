@@ -94,7 +94,7 @@ function MyNFT() {
             seller: d.seller,
             owner: d.owner,
             image: imageUrl,
-            name: meta.data.name,
+            title: meta.data.name,
             desc: meta.data.description,
           };
           // const tokenUri = await contract.tokenURI(d.tokenId);
