@@ -119,6 +119,10 @@ function AllNFT() {
       );
     }
   };
+
+  useEffect(() => {
+    getItems();
+  },[])
   return (
     <div className="">
       <span className="text-white text-3xl font-bold">Our Product</span>
