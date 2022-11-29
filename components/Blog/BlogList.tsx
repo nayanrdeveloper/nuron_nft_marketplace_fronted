@@ -5,75 +5,75 @@ import { CgTime } from "react-icons/cg";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import ClipLoader from "react-spinners/ClipLoader";
-// import blogABI from "../../artifacts/contracts/blog.sol/Blog.json";
-// import { ethers } from "ethers";
-// import axios from "axios";
-// import connectWallet from "../../walletConnect";
-// import Loader from "../Loader/Loader";
+import blogAbi from "../../contractAbi/blogAbi";
+import { ethers } from "ethers";
+import axios from "axios";
+import { useSigner } from "wagmi";
+import { useProvider } from "wagmi";
+import { RotatingLines } from "react-loader-spinner";
 
 function BlogList() {
-  const [blogListData, setBlogListData] = useState([]);
+  const [blogListData, setBlogListData] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
+  const { data: signer, isError } = useSigner();
+  const provider = useProvider();
   useEffect(() => {
-    // getBlogs();
+    getBlogs();
   }, []);
 
-  // const getBlogs = async () => {
-  //   setIsLoading(true);
-  //   connectWallet.connectWallet();
-  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  //   const signer = await provider.getSigner();
-  //   const blogSmartContract = new ethers.Contract(
-  //     process.env.NEXT_PUBLIC_BLOG_CONTRACT_ADDRESS,
-  //     blogABI.abi,
-  //     signer
-  //   );
-  //   const blogData = await blogSmartContract.getAllBlogs();
-  //   const data = await Promise.all(
-  //     blogData.map(async (d) => {
-  //       const meta = await axios.get(d._blogUrl);
-  //       const blogId = d._blogId.toNumber();
-  //       const imageUrl = `https://ipfs.io/ipfs/${meta.data.image.substr(7)}`;
-  //       return {
-  //         title: d._title,
-  //         image: imageUrl,
-  //         desc: meta.data.description,
-  //         category: d._category,
-  //         blogId: blogId,
-  //       };
-  //     })
-  //   );
-  //   setBlogListData(data);
-  //   setIsLoading(false);
-  // };
+  const getBlogs = async () => {
+    setIsLoading(true);
+    const blogSmartContract = new ethers.Contract(
+      process.env.NEXT_PUBLIC_BLOG_ADDRESS || "",
+      blogAbi,
+      signer || provider
+    );
+    const blogData = await blogSmartContract.getAllBlogs();
+    const data: any = await Promise.all(
+      blogData.map(async (d: any) => {
+        const meta = await axios.get(d._blogUrl);
+        const blogId = d._blogId.toNumber();
+        const imageUrl = `https://ipfs.io/ipfs/${meta.data.image.substr(7)}`;
+        return {
+          title: d._title,
+          image: imageUrl,
+          desc: meta.data.description,
+          category: d._category,
+          blogId: blogId,
+        };
+      })
+    );
+    setBlogListData(data);
+    setIsLoading(false);
+  };
   const blogList = [
     {
       image: "/design2.webp",
       title: "Ayan Dog GIF",
       category: "NFTs",
       time: "2",
-      blogId: 1
+      blogId: 1,
     },
     {
       image: "/design1.webp",
       title: "Decentraland and Meta Verse",
       category: "Marketing",
       time: "4",
-      blogId: 2
+      blogId: 2,
     },
     {
       image: "/design4.webp",
       title: "Beeple Everydays The First 10 Days",
       category: "Design",
       time: "3",
-      blogId: 3
+      blogId: 3,
     },
     {
       image: "/design7.jpg",
       title: "NFTs are too important for best artists",
       category: "NFTs",
       time: "2",
-      blogId: 4
+      blogId: 4,
     },
   ];
   return (
@@ -82,10 +82,10 @@ function BlogList() {
         <div className="">
           <span className="text-white text-3xl font-bold">Blogs</span>
           <div
-            className={`grid ${blogList ? "grid-cols-2" : ""} mt-8 gap-5`}
+            className={`grid ${blogListData ? "grid-cols-2" : ""} mt-8 gap-5`}
           >
-            {blogList ? (
-              blogList.map((blogData, index) => {
+            {blogListData ? (
+              blogListData.map((blogData: any, index: number) => {
                 return (
                   <div
                     key={index}
@@ -117,7 +117,13 @@ function BlogList() {
             ) : (
               <span className="flex justify-center my-auto">
                 {" "}
-                {/* <Loader />{" "} */}
+                <RotatingLines
+                  strokeColor="grey"
+                  strokeWidth="5"
+                  animationDuration="0.75"
+                  width="96"
+                  visible={true}
+                />{" "}
               </span>
             )}
           </div>

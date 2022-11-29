@@ -2,15 +2,18 @@ import React, { useEffect, useState } from "react";
 import { FaFileUpload } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import { NFTStorage, File } from "nft.storage";
+import { NFTStorage, File } from "nft.storage";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import ClipLoader from "react-spinners/ClipLoader";
-// import blogABI from "../../artifacts/contracts/blog.sol/Blog.json";
-// import { ethers } from "ethers";
-// import connectWallet from "../../walletConnect";
+import blogAbi from "../../contractAbi/blogAbi";
+import { ethers } from "ethers";
+import { useSigner } from "wagmi";
+import { useProvider } from "wagmi";
 
 function CreateBlog() {
+  const { data: signer, isError } = useSigner();
+  const provider = useProvider();
   useEffect(() => {
     AOS.init();
     AOS.refresh();
@@ -36,86 +39,81 @@ function CreateBlog() {
     });
   };
 
-//   const onSubmitBlog = async (event) => {
-//     event.preventDefault();
-//     const imageFile = event.target.file.files[0];
-//     if (!blogData.title || !blogData.desc || !blogData.category) {
-//       toast.error("All Fields are required!!!", {
-//         position: "top-right",
-//         autoClose: 3000,
-//         hideProgressBar: false,
-//         closeOnClick: true,
-//         pauseOnHover: true,
-//         draggable: true,
-//         progress: undefined,
-//       });
-//     } else {
-//       try {
-//         setIsLoading(true);
-//         const nftStorage = new NFTStorage({
-//           token: process.env.NEXT_PUBLIC_NFT_STORAGE_KEY,
-//         });
-//         console.log(nftStorage);
-//         const link = await nftStorage.store({
-//           image: imageFile,
-//           name: blogData.title,
-//           description: blogData.desc,
-//           category: blogData.category,
-//         });
-//         console.log(link);
-//         const ipfsURL = `https://ipfs.io/ipfs/${link.url.substr(7)}`;
-//         connectWallet.connectWallet();
-//         const provider = new ethers.providers.Web3Provider(window.ethereum);
-//         const signer = await provider.getSigner();
-//         console.log(signer);
-
-//         const blogContract = new ethers.Contract(
-//           process.env.NEXT_PUBLIC_BLOG_CONTRACT_ADDRESS,
-//           blogABI.abi,
-//           signer
-//         );
-//         let traction = await blogContract.createBlog(
-//           blogData.title,
-//           ipfsURL,
-//           blogData.category
-//         );
-//         await traction.wait();
-//         console.log(traction);
-//         setIsLoading(false);
-//         setBlogData({
-//           title: "",
-//           desc: "",
-//           imageUrl: "",
-//           category: "",
-//         });
-//         toast.success("Blog are Upload Successfully", {
-//           position: "top-right",
-//           autoClose: 3000,
-//           hideProgressBar: false,
-//           closeOnClick: true,
-//           pauseOnHover: true,
-//           draggable: true,
-//           progress: undefined,
-//         });
-//       } catch (error) {
-//         toast.error("Something to wrong please after some time", {
-//           position: "top-right",
-//           autoClose: 3000,
-//           hideProgressBar: false,
-//           closeOnClick: true,
-//           pauseOnHover: true,
-//           draggable: true,
-//           progress: undefined,
-//         });
-//         console.log(error);
-//       }
-//     }
-//   };
+  const onSubmitBlog = async (event : any) => {
+    event.preventDefault();
+    const imageFile = event.target.file.files[0];
+    if (!blogData.title || !blogData.desc || !blogData.category) {
+      toast.error("All Fields are required!!!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } else {
+      try {
+        setIsLoading(true);
+        const nftStorage = new NFTStorage({
+          token: process.env.NEXT_PUBLIC_NFT_STORAGE_KEY || "",
+        });
+        console.log(nftStorage);
+        const link = await nftStorage.store({
+          image: imageFile,
+          name: blogData.title,
+          description: blogData.desc,
+          category: blogData.category,
+        });
+        console.log(link);
+        const ipfsURL = `https://ipfs.io/ipfs/${link.url.substr(7)}`;
+        const blogContract = new ethers.Contract(
+          process.env.NEXT_PUBLIC_BLOG_ADDRESS || "",
+          blogAbi,
+          signer || provider
+        );
+        let traction = await blogContract.createBlog(
+          blogData.title,
+          ipfsURL,
+          blogData.category
+        );
+        await traction.wait();
+        console.log(traction);
+        setIsLoading(false);
+        setBlogData({
+          title: "",
+          desc: "",
+          imageUrl: "",
+          category: "",
+        });
+        toast.success("Blog are Upload Successfully", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } catch (error) {
+        toast.error("Something to wrong please after some time", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        console.log(error);
+      }
+    }
+  };
   return <div className="container my-8">
   <ToastContainer theme="dark" />
   <div className="">
     <span className="text-white text-3xl font-bold">Blog Create</span>
-    <form>
+    <form onSubmit={onSubmitBlog}>
       <div className="flex gap-x-10 mt-8">
         <div className="justify-center my-auto" data-aos="fade-right">
           <p className="text-white">Upload file</p>

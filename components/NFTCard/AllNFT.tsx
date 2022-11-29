@@ -10,6 +10,7 @@ import axios from "axios";
 // import connectWallet from "../walletConnect";
 import { useSigner } from "wagmi";
 import { useProvider } from "wagmi";
+import { RotatingLines } from "react-loader-spinner";
 
 function AllNFT() {
   const { data: signer, isError } = useSigner();
@@ -82,7 +83,7 @@ function AllNFT() {
         signer || provider
       );
       const data = await marketplaceContract.getAllNFTs();
-      let newItems : any = await Promise.all(
+      let newItems: any = await Promise.all(
         data.map(async (d: any) => {
           console.log(d);
           const tokenUri = await tokenContract.tokenURI(d._tokenId);
@@ -122,7 +123,7 @@ function AllNFT() {
 
   useEffect(() => {
     getItems();
-  },[])
+  }, []);
   return (
     <div className="">
       <span className="text-white text-3xl font-bold">Our Product</span>
@@ -135,7 +136,13 @@ function AllNFT() {
           ) : (
             <span className="flex justify-center my-auto">
               {" "}
-              {/* <Loader />{" "} */}
+              <RotatingLines
+                strokeColor="grey"
+                strokeWidth="5"
+                animationDuration="0.75"
+                width="96"
+                visible={true}
+              />
             </span>
           )}
         </div>
