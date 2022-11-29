@@ -27,15 +27,15 @@ function Navbar() {
     },
     {
       name: "All NFT",
-      to: "/allNFTs",
+      to: "/allnft",
     },
     {
       name: "My NFT",
-      to: "/myNFTs",
+      to: "/mynft",
     },
     {
       name: "Blog Create",
-      to: "/blogCreate",
+      to: "/create_blog",
     },
     {
       name: "Blog",
