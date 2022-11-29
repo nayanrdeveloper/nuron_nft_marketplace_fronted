@@ -6,14 +6,17 @@
     "start": "next start"
   },
   "dependencies": {
+    "@rainbow-me/rainbowkit": "^0.8.0",
     "aos": "^2.3.4",
+    "ethers": "^5.7.2",
     "next": "latest",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.6.0",
     "react-spinners": "^0.13.6",
     "react-toastify": "^9.1.1",
-    "swiper": "^8.4.5"
+    "swiper": "^8.4.5",
+    "wagmi": "^0.8.7"
   },
   "devDependencies": {
     "@types/aos": "^3.0.4",
