@@ -45,7 +45,7 @@ function NFTItems() {
     <div className="container mb-5">
       <div className="flex justify-between mt-10 gap-6">
         <p className="text-3xl text-white font-medium">Newest Items</p>
-        <Link href="/allNFTs">
+        <Link href="/allnft">
           <p className="text-2xl text-[#acacac] flex hover:cursor-pointer">
             View All <FaArrowRight className="ml-2 mt-1" />
           </p>
