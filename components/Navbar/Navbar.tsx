@@ -44,9 +44,9 @@ function Navbar() {
     },
   ];
   return (
-    <nav className="flex justify-between py-3 border-b border-[#ffffff14] backdrop-blur-[9px] p-5">
+    <nav className="flex flex-col md:flex-row justify-between py-3 border-b border-[#ffffff14] backdrop-blur-[9px] p-3 md:p-5">
       <NavLogo />
-      <ul className="flex my-auto ml-7">
+      <ul className="flex flex-col md:flex-row md:my-auto md:ml-7">
         {navItems.map((item: navItemStruct) => {
           return (
             <span key={item.name}>
@@ -59,7 +59,7 @@ function Navbar() {
           );
         })}
       </ul>
-      <div className="my-auto flex">
+      <div className="flex">
         <ConnectButton />
         {/* <button
           onClick={onConnectWallet}

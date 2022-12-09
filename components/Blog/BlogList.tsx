@@ -98,7 +98,7 @@ function BlogList() {
         <div className="">
           <span className="text-white text-3xl font-bold">Blogs</span>
           <div
-            className={`grid ${blogListData ? "grid-cols-2" : ""} mt-8 gap-5`}
+            className={`grid ${blogListData ? "grid-cols-1 md:grid-cols-2" : ""} mt-8 gap-5`}
           >
             {blogListData ? (
               blogListData.map((blogData: any, index: number) => {

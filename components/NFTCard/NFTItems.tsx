@@ -51,7 +51,7 @@ function NFTItems() {
           </p>
         </Link>
       </div>
-      <div className="grid grid-cols-3 mt-8 gap-9">
+      <div className="grid grid-cols-1 md:grid-cols-3 mt-8 gap-9">
         {NFTCardList.map((NFTCardData: NFTCardStrut) => {
           return <NFTCard key={NFTCardData.title} {...NFTCardData} />;
         })}

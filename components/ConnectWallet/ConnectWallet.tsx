@@ -11,7 +11,7 @@ function ConnectWallet() {
         </span>
         <div className="flex flex-col gap-x-10 gap-y-4 mt-8">
           <h3 className="text-2xl font-bold text-white">Connect your wallet</h3>
-          <div className="flex text-[#acacac]">
+          <div className="flex flex-col gap-3 md:gap-0 md:flex-row text-[#acacac]">
             <div>
               Connect with one of available wallet providers or create a new
               wallet.
@@ -21,7 +21,7 @@ function ConnectWallet() {
               without your confirmation.
             </div>
           </div>
-          <div className="flex gap-10">
+          <div className="flex flex-col md:flex-row gap-10">
             <div className="p-3 rounded-md bg-[#24243557]">
               <Image
                 src="/connect-01.webp"
@@ -31,7 +31,7 @@ function ConnectWallet() {
               />
             </div>
             <div className="flex flex-col gap-4">
-              <div className="flex gap-4">
+              <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex flex-col gap-4 p-8 bg-[#24243557] rounded-md border border-[#ffffff14] hover:-translate-y-2 duration-300">
                   <FaChargingStation className="text-3xl text-[#00a3ff]" />
                   <h3 className="text-white text-2xl">BitCollect</h3>

@@ -23,9 +23,9 @@ function Footer() {
     },
   ];
   return (
-    <footer className="px-16 py-8 border-t border-[#ffffff14]">
-      <div className="flex justify-between text-[#acacac]">
-        <div className="flex gap-2">
+    <footer className="px-3 md:px-16 py-4 md:py-8 border-t border-[#ffffff14]">
+      <div className="flex flex-col md:flex-row justify-between text-[#acacac]">
+        <div className="flex flex-col justify-center items-center md:flex-row gap-2">
           <span className="border-r border-[#ffffff14] px-2">
             ©2022 Nuron, Inc. All rights reserved
           </span>
@@ -34,7 +34,7 @@ function Footer() {
             <li>Privacy Policy</li>
           </ul>
         </div>
-        <div className="flex">
+        <div className="flex justify-center">
           <ul className="flex gap-2">
               {
                 socialMediaList.map((socialMedia: socialMediaListStruct, index) => {

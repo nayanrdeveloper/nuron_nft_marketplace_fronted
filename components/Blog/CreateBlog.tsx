@@ -114,7 +114,7 @@ function CreateBlog() {
   <div className="">
     <span className="text-white text-3xl font-bold">Blog Create</span>
     <form onSubmit={onSubmitBlog}>
-      <div className="flex gap-x-10 mt-8">
+      <div className="flex flex-col md:flex-row gap-x-3 md:gap-x-10 mt-8">
         <div className="justify-center my-auto" data-aos="fade-right">
           <p className="text-white">Upload file</p>
           <div className="py-6 mt-7 flex justify-center text-center my-auto flex-col border-2 border-dashed border-[#575767]">

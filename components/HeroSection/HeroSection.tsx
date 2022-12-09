@@ -10,7 +10,7 @@ function HeroSection() {
     AOS.refresh();
   })
   return (
-    <section className='grid grid-cols-2 container py-16'>
+    <section className='grid grid-cols-1 md:grid-cols-2 container py-3 md:py-16'>
         <div className='flex flex-col gap-6' data-aos="fade-right">
             <h2 className='text-white text-5xl leading-normal'>Discover Digital Art, Collect and Sell Your Specific NFTs.</h2>
             <p className='text-2xl text-[#acacac]'>Partner with one of the worlds largest retailers to showcase your brand and products.</p>

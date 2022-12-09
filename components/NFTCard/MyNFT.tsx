@@ -124,7 +124,7 @@ function MyNFT() {
     <div className="">
       <span className="text-white text-3xl font-bold">Our Product</span>
       <div>
-        <div className={`grid ${NFTData ? "grid-cols-3" : ""} gap-9 mt-8`}>
+        <div className={`grid ${NFTData ? "grid-cols-1 md:grid-cols-3" : ""} gap-3 md:gap-9 mt-8`}>
         {NFTData ? (
             NFTData.map((NFTCardData: any) => {
               return <NFTCard key={NFTCardData.tokenId} {...NFTCardData} />;

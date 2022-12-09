@@ -37,7 +37,7 @@ function NFTStep() {
   return (
     <div className='container'>
         <h3 className='text-white text-3xl'>Create and sell your NFTs</h3>
-        <div className='grid grid-cols-3 mt-10 gap-6'>
+        <div className='grid grid-cols-1 md:grid-cols-3 mt-10 gap-6'>
             {
                 NFTStepList.map((NFTStep: NFTStepStruct) => {
                     return <NFTStepCard key={NFTStep.title} {...NFTStep} />

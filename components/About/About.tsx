@@ -38,9 +38,9 @@ function About() {
         <span className="text-white text-3xl font-bold">
           For Your Dadicated Dreams
         </span>
-        <div className="grid grid-cols-2 gap-9 mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-9 mt-8">
           <div
-            className="p-6 flex flex-col gap-5 border border-[#ffffff14] rounded-sm bg-[#242435]"
+            className="p-6 flex flex-col gap-2 md:gap-5 border border-[#ffffff14] rounded-sm bg-[#242435]"
             data-aos="fade-right"
           >
             <h4 className="font-bold text-3xl text-white">Why We Do This</h4>
@@ -95,8 +95,8 @@ function About() {
         <p className="text-center text-white text-3xl font-bold">
           Nuron Statistics
         </p>
-        <div className="px-40 mt-10">
-          <div className="grid grid-cols-2 gap-8 mx-auto justify-center">
+        <div className="px-5 md:px-40 mt-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mx-auto justify-center">
             {statisticsList.map((staticsCardData: staticsStruct) => {
               return (
                 <StatisticsCard

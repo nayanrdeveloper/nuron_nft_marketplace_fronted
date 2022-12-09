@@ -12,7 +12,10 @@ module.exports = {
       },
     },
     container: {
-      padding: '8rem',
+      padding: {
+        md: '8rem',
+        sm: '4rem',
+      }
     },
   },
   plugins: [],
